@@ -1,12 +1,19 @@
 package com.user.usermanagementapi.controller;
 
 import com.user.usermanagementapi.model.User;
+
 import com.user.usermanagementapi.repository.UserRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -19,15 +26,21 @@ public class UserController {
     private UserRepository userRepository;
 
     @PostMapping
-    public ResponseEntity<User> createUser(@Valid @RequestBody User user){
-        User savedUser=userRepository.save(user);
-        return  ResponseEntity.status(HttpStatus.CREATED).body(savedUser);
+    public ResponseEntity<List<User>> createUsers(@Valid @RequestBody List<User> users){
+    	List<User> savedUsers = userRepository.saveAll(users);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedUsers);
     }
 
     @GetMapping
     public List<User> getAllUsers(){
         return userRepository.findAll(); // Retrieves all the users from the db
     }
+    
+    @GetMapping("/page")
+    public Page<User> getUsers(Pageable pageable){
+    	return userRepository.findAll(pageable);
+    }
+    
     @GetMapping("/{id}")   //...api/users/{id}
     public ResponseEntity<User> getUserById(@PathVariable Long id){
         Optional<User> user=userRepository.findById(id);

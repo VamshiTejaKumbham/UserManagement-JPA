@@ -18,7 +18,8 @@
     <description>User Management project for Spring Boot</description>
 
     <properties>
-        <java.version>24</java.version>
+        <java.version>17</java.version>
+        <maven.compiler.release>17</maven.compiler.release> 
     </properties>
 
     <dependencies>

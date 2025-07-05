@@ -1,4 +1,5 @@
 package com.user.usermanagementapi;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -109,7 +110,28 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$[1].name", is(newUser2.getName())))
                 .andExpect(jsonPath("$[1].email", is(newUser2.getEmail())));
     
-                
-
     }
+        // void testDeleteUserFound()
+        // void testDeleteUserNotFound()
+
+    @Test
+    void testDeleteUserFound() throws Exception {
+    // This test checks if the user is deleted successfully when the user exists
+
+    mockMvc.perform(delete("/api/users/{id}", user1.getId())
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNoContent());
+    }
+
+@Test
+void testDeleteUserNotFound() throws Exception {
+    // This test checks the behavior when attempting to delete a non-existing user
+
+    Long noUserId = 9999L;
+
+    mockMvc.perform(delete("/api/users/{id}", noUserId)
+            .contentType(MediaType.APPLICATION_JSON))
+            .andExpect(status().isNotFound());
 }
+}
+        

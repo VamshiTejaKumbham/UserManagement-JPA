@@ -1,29 +1,30 @@
 
-const API_URL = "<http://localhost:8082/api/users>";
+const API_URL = "http://localhost:8082/api/users";
 
 document.addEventListener("DOMContentLoaded", () => {
     loadUsers();
 
     document.getElementById("add-user-form").addEventListener("submit", async (e) => {
-        e.preventDefault();
-        const name = document.getElementById("name").value.trim();
-        const email = document.getElementById("email").value.trim();
-        if (!name || !email) return;
+    e.preventDefault();
+    const name = document.getElementById("name").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
+    if (!name || !email || !password) return;
 
-        try {
-            const res = await fetch(API_URL, {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify([{ name, email }])
-            });
-            if (!res.ok) throw new Error("Failed to add user");
-            showMessage("User added successfully!", "green");
-            document.getElementById("add-user-form").reset();
-            loadUsers();
-        } catch (err) {
-            showMessage("Error: " + err.message, "red");
-        }
-    });
+    try {
+        const res = await fetch(API_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify([{ name, email, password }])
+        });
+        if (!res.ok) throw new Error("Failed to add user");
+        showMessage("User added successfully!", "green");
+        document.getElementById("add-user-form").reset();
+        loadUsers();
+    } catch (err) {
+        showMessage("Error: " + err.message, "red");
+    }
+});
 });
 
 async function loadUsers() {
